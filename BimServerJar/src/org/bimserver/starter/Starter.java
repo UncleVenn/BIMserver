@@ -88,7 +88,7 @@ public class Starter extends JFrame {
 //        starter.start();
         String address = "192.168.0.38";
         String port = "8082";
-        String homedir = "C:\\Users\\Lenovo\\Desktop\\home";
+        String homedir = "./home";
         for (String arg : args) {
             if (arg.startsWith("address=")) {
                 address = arg.substring(8);

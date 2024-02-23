@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BimServer/bimserver.iml" filepath="$PROJECT_DIR$/BimServer/bimserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BimServerClientLib/bimserverclientlib.iml" filepath="$PROJECT_DIR$/BimServerClientLib/bimserverclientlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BimServerJar/bimserverjar.iml" filepath="$PROJECT_DIR$/BimServerJar/bimserverjar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BimServerWar/bimserverwar.iml" filepath="$PROJECT_DIR$/BimServerWar/bimserverwar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PluginBase/pluginbase.iml" filepath="$PROJECT_DIR$/PluginBase/pluginbase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Shared/shared.iml" filepath="$PROJECT_DIR$/Shared/shared.iml" />
+    </modules>
+  </component>
+</project>

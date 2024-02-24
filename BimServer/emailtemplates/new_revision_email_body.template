@@ -1,0 +1,13 @@
+## Available parameters:
+##   name: The users full name
+##   username: The users username (usually e-mail address)
+##   siteaddress: The address of the running BIMserver
+##   validationlink: A link where the user can set his/her password
+#parse("inc/header.template")
+Hello $name,<br/>
+<br/>
+A new revision has been uploaded successfully to project "$projectName" at $siteaddress.<br/>
+
+Click <a href="$siteaddress/apps/bimviews/?page=Projects&poid=$poid&tab=revisions&token=$token">here</a> to view the results.<br/>
+<br/>
+#parse("inc/footer.template")

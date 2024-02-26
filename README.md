@@ -6,7 +6,3 @@ bim-vue中有三个组件
 
 
 BimServerJar启动会自动安装指定home目录下的plugins目录中的插件
-
-默认账号密码
-admin@bimserver.com
-123456

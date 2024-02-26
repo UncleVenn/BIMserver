@@ -12,15 +12,13 @@ export default {
             properties: null,
         }
     },
-    mounted() {
+    created() {
+        this.$mitt.on(`${this.projectName}-artifactId-selected`, this.artifactIdSelectedHandler)
         this.$bimserver.bimServerApiPromise.done(() => {
             this.$bimserver.getProjectsByName(this.projectName).then(project => {
                 this.project = project;
             })
         })
-    },
-    created() {
-        this.$mitt.on(`${this.projectName}-artifactId-selected`, this.artifactIdSelectedHandler)
     },
     methods: {
         artifactIdSelectedHandler(id) {

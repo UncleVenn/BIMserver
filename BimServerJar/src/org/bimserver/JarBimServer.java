@@ -170,13 +170,19 @@ public class JarBimServer {
             LOGGER.info("install plugins");
             session = bimServer.getDatabase().createSession(OperationType.POSSIBLY_WRITE);
             PluginServiceImpl service = (PluginServiceImpl) bimServer.getService(PluginInterface.class);
-            File file = new File(homedir + "/plugins");
+            File file = new File(homedir + "/install_plugins");
             if (file.exists() && file.isDirectory()) {
                 File[] plugins = file.listFiles();
                 for (File plugin : plugins) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     IOUtils.copy(new FileInputStream(plugin), byteArrayOutputStream);
-                    session.executeAndCommitAction(new InstallPluginBundleFromBytes(session, service.getInternalAccessMethod(), bimServer, byteArrayOutputStream.toByteArray(), true, true));
+                    try {
+                        session.executeAndCommitAction(new InstallPluginBundleFromBytes(session, service.getInternalAccessMethod(), bimServer, byteArrayOutputStream.toByteArray(), true, true));
+                    } catch (Exception e) {
+                        LOGGER.info(e.getMessage());
+                    } finally {
+                        file.delete();
+                    }
                 }
             }
         } catch (Exception e) {

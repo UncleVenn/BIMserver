@@ -2,11 +2,11 @@
     <div>
         <Upload project-name="ttttt112222"></Upload>
         <div class="item" style="height: 800px;width:300px;overflow-y: scroll">
-            <ArtifactInformation ref="artifactInformation" project-name="test1"></ArtifactInformation>
+            <ArtifactInformation ref="artifactInformation" project-name="test"></ArtifactInformation>
         </div>
         <div class="item">
-            <CanvasView width="800" height="500" project-name="test1"></CanvasView>
-            <ArtifactProperties project-name="test1"></ArtifactProperties>
+            <CanvasView width="800" height="500" project-name="test"></CanvasView>
+            <ArtifactProperties project-name="test"></ArtifactProperties>
         </div>
     </div>
 </template>

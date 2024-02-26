@@ -5,4 +5,4 @@ bim-vue中有三个组件
 - Upload.vue 用于上传ifc文件
 
 
-BimServerJar启动会自动安装指定home目录下的plugins目录中的插件
+BimServerJar启动会自动安装指定home目录下的install_plugins目录中的插件

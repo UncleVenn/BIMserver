@@ -12,22 +12,21 @@ export default {
         return {
             renderColor: [
                 {
-                    'id': 131987,
+                    'id': 131850,
                     'color': [1, 0.3, 0.3, 1],
                 },
                 {
-                    'id': 590049,
+                    'id': 459321,
                     'color': [0, 1, 1, 1],
                 },
                 {
-                    'id': 458977,
+                    'id': 590393,
                     'color': [1, 1, 0, 1],
                 },
             ]
         }
     },
     mounted() {
-
         this.$bimserver.bimServerApiPromise.done(() => {
             this.$bimserver.getProjectsByName(this.projectName).then(project => {
                 this.$bimserver.view = this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {

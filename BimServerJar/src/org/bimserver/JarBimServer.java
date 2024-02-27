@@ -45,6 +45,7 @@ import org.bimserver.database.DatabaseSession;
 import org.bimserver.database.OperationType;
 import org.bimserver.database.actions.InstallPluginBundleFromBytes;
 import org.bimserver.resources.JarResourceFetcher;
+import org.bimserver.shared.BimServerClientFactory;
 import org.bimserver.shared.exceptions.PluginException;
 import org.bimserver.shared.exceptions.UserException;
 import org.bimserver.shared.interfaces.PluginInterface;
@@ -175,7 +176,7 @@ public class JarBimServer {
                 File[] plugins = file.listFiles();
                 for (File plugin : plugins) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    IOUtils.copy(new FileInputStream(plugin), byteArrayOutputStream);
+                    IOUtils.copy(Files.newInputStream(plugin.toPath()), byteArrayOutputStream);
                     try {
                         session.executeAndCommitAction(new InstallPluginBundleFromBytes(session, service.getInternalAccessMethod(), bimServer, byteArrayOutputStream.toByteArray(), true, true));
                     } catch (Exception e) {

@@ -54,7 +54,7 @@ public class Draw2DAABB extends JFrame {
 	
 	private void createImage() {
 		Graphics graphics = image.getGraphics();
-		try (JsonBimServerClientFactory factory = new JsonBimServerClientFactory("http://localhost:8080")) {
+		try (JsonBimServerClientFactory factory = new JsonBimServerClientFactory("http://localhost:8082")) {
 			try (BimServerClient client = factory.create(new UsernamePasswordAuthenticationInfo("admin@bimserver.org", "admin"))) {
 				List<SProjectSmall> allRelatedProjects = client.getServiceInterface().getAllRelatedProjects(13500417L);
 				Bounds totalBounds = new Bounds();

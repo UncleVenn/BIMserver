@@ -3,7 +3,6 @@ export default {
     props: {
         projectName: {
             type: String,
-            required: true
         }
     },
     data() {
@@ -19,17 +18,27 @@ export default {
             },
         }
     },
-    mounted() {
-        this.$bimserver.bimServerApiPromise.done(() => {
-            this.$bimserver.getProjectsByName(this.projectName).then(project => {
-                this.$bimserver.getArtifactInformation(project, false).then(result => {
-                    this.tree = result.getTree();
-                    this.$bimserver.tree = this.$refs['el-tree'];
-                })
-            })
-        })
+    created() {
+        this.init();
+    },
+    watch: {
+        projectName(val) {
+            this.init();
+        }
     },
     methods: {
+        init() {
+            if (this.projectName !== null) {
+                this.$bimserver.bimServerApiPromise.done(() => {
+                    this.$bimserver.getProjectsByName(this.projectName).then(project => {
+                        this.$bimserver.getArtifactInformation(project, false).then(result => {
+                            this.tree = result.getTree();
+                            this.$bimserver.tree = this.$refs['el-tree'];
+                        })
+                    })
+                })
+            }
+        },
         handleNodeChange(data, node, self) {
             let id = data.id;
             this.$mitt.emit(`${this.projectName}-artifactId-selected`, id)
@@ -57,7 +66,8 @@ export default {
              highlight-current node-key="id"
              :current-node-key="currentNodeKey"
              :props="defaultProps"
-    ></el-tree>
+    >
+    </el-tree>
 </template>
 
 <style scoped>

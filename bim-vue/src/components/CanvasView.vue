@@ -5,7 +5,6 @@ export default {
         height: null,
         projectName: {
             type: String,
-            required: true
         },
     },
     data() {
@@ -26,37 +25,52 @@ export default {
             ]
         }
     },
-    mounted() {
-        this.$bimserver.bimServerApiPromise.done(() => {
-            this.$bimserver.getProjectsByName(this.projectName).then(project => {
-                this.$bimserver.view = this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
-                    // console.log(percentage + "% loaded")
-                    if (percentage === 100) {
-                        this.$bimserver.renderColor(this.renderColor);
-                    }
-                }, {
-                    loaderSettings: {
-                        generateLineRenders: true,
-                    },
-                    realtimeSettings: {
-                        // drawLineRenders: true,
-                    }
-                });
-                this.$bimserver.view.addSelectionListener({
-                    handler: (renderLayer, ids, render) => {
-                        if (render && this.$bimserver.tree) {
-                            this.$nextTick(() => {
-                                let node = this.$bimserver.tree.getNode(ids[0]);
-                                this.$bimserver.tree.setCurrentNode(node.data);
-                                this.$bimserver.tree.$emit('current-change', node.data, node);
-                            });
-                        }
-                    }
-                })
-            })
-        })
+    created() {
+        this.init();
     },
-    methods: {}
+    watch: {
+        projectName(val) {
+            this.init();
+        }
+    },
+    methods: {
+        init() {
+            if (this.projectName !== null) {
+                this.$bimserver.bimServerApiPromise.done(() => {
+                    this.$bimserver.getProjectsByName(this.projectName).then(project => {
+                        this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
+                            // console.log(percentage + "% loaded")
+                            if (percentage === 100) {
+                                this.$bimserver.renderColor(this.renderColor);
+                            }
+                        }, {
+                            loaderSettings: {
+                                generateLineRenders: true,
+                            },
+                            realtimeSettings: {
+                                // drawLineRenders: true,
+                            }
+                        });
+                        this.$bimserver.view.addSelectionListener({
+                            handler: (renderLayer, ids, render) => {
+                                if (render && this.$bimserver.tree) {
+                                    this.$nextTick(() => {
+                                        let node = this.$bimserver.tree.getNode(ids[0]);
+                                        this.$bimserver.tree.setCurrentNode(node.data);
+                                        this.$bimserver.tree.$emit('current-change', node.data, node);
+                                        this.$nextTick(() => {
+                                            let element = this.$bimserver.tree.$el.querySelector('.is-current')
+                                            element.scrollIntoView()
+                                        })
+                                    });
+                                }
+                            }
+                        })
+                    })
+                })
+            }
+        }
+    }
 }
 </script>
 
@@ -65,5 +79,7 @@ export default {
 </template>
 
 <style scoped>
-
+canvas {
+    width: 100%;
+}
 </style>

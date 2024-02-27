@@ -54,7 +54,7 @@ class Bimserver {
         let bimServerViewer = new BimServerViewer(settings, domNode, null, null, null);
         bimServerViewer.setProgressListener(progressListener);
         bimServerViewer.loadModel(this.apiClient, project, null);
-        return bimServerViewer;
+        this.view = bimServerViewer;
     }
 
     /**
@@ -211,33 +211,35 @@ class Bimserver {
                     GUID: object.getGlobalId(),
                     "UUID (Server)": object.object._u,
                 };
-                object.getGeometry(function (geometryInfo) {
-                    if (geometryInfo != null) {
-                        var knownTranslations = {
-                            TOTAL_SURFACE_AREA: "Total surface area",
-                            TOTAL_SHAPE_VOLUME: "Total shape volume",
-                            SURFACE_AREA_ALONG_X: "Surface area along X axis",
-                            SURFACE_AREA_ALONG_Y: "Surface area along Y axis",
-                            SURFACE_AREA_ALONG_Z: "Surface area along Z axis",
-                            WALKABLE_SURFACE_AREA: "Walkable surface area",
-                            LARGEST_FACE_AREA: "Largest face area",
-                            BOUNDING_BOX_SIZE_ALONG_X: "Bounding box size along X axis",
-                            BOUNDING_BOX_SIZE_ALONG_Y: "Bounding box size along Y axis",
-                            BOUNDING_BOX_SIZE_ALONG_Z: "Bounding box size along Z axis",
-                            LARGEST_FACE_DIRECTION: "Largest face direction"
-                        };
-                        if (geometryInfo.object.additionalData != null) {
-                            let calc = {};
-                            var additionalData = JSON.parse(geometryInfo.object.additionalData);
-                            for (const key in additionalData) {
-                                let value = additionalData[key];
-                                calc[knownTranslations[key]] = value;
+                if(object.getGeometry){
+                    object.getGeometry(function (geometryInfo) {
+                        if (geometryInfo != null) {
+                            var knownTranslations = {
+                                TOTAL_SURFACE_AREA: "Total surface area",
+                                TOTAL_SHAPE_VOLUME: "Total shape volume",
+                                SURFACE_AREA_ALONG_X: "Surface area along X axis",
+                                SURFACE_AREA_ALONG_Y: "Surface area along Y axis",
+                                SURFACE_AREA_ALONG_Z: "Surface area along Z axis",
+                                WALKABLE_SURFACE_AREA: "Walkable surface area",
+                                LARGEST_FACE_AREA: "Largest face area",
+                                BOUNDING_BOX_SIZE_ALONG_X: "Bounding box size along X axis",
+                                BOUNDING_BOX_SIZE_ALONG_Y: "Bounding box size along Y axis",
+                                BOUNDING_BOX_SIZE_ALONG_Z: "Bounding box size along Z axis",
+                                LARGEST_FACE_DIRECTION: "Largest face direction"
+                            };
+                            if (geometryInfo.object.additionalData != null) {
+                                let calc = {};
+                                var additionalData = JSON.parse(geometryInfo.object.additionalData);
+                                for (const key in additionalData) {
+                                    let value = additionalData[key];
+                                    calc[knownTranslations[key]] = value;
+                                }
+                                result['Calculated'] = calc;
                             }
-                            result['Calculated'] = calc;
                         }
-                    }
-                    promise.dec();
-                });
+                        promise.dec();
+                    });
+                }
                 object.getIsDefinedBy(function (isDefinedBy, length) {
                     if (isDefinedBy.getType() === "IfcRelDefinesByProperties") {
                         isDefinedBy.getRelatingPropertyDefinition(function (propertySet) {

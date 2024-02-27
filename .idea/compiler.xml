@@ -10,6 +10,7 @@
         <module name="pluginbase" />
         <module name="shared" />
         <module name="bdb" />
+        <module name="tests" />
         <module name="bimserverclientlib" />
         <module name="bimserverjar" />
         <module name="bimserver" />

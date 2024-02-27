@@ -1,12 +1,18 @@
 <template>
     <div>
-        <Upload project-name="ttttt112222"></Upload>
-        <div class="item" style="height: 800px;width:300px;overflow-y: scroll">
-            <ArtifactInformation ref="artifactInformation" project-name="test"></ArtifactInformation>
+        <div>
+            <ProjectList :select-project="projectSelect"></ProjectList>
         </div>
-        <div class="item">
-            <CanvasView width="800" height="500" project-name="test"></CanvasView>
-            <ArtifactProperties project-name="test"></ArtifactProperties>
+        <div class="container">
+            <div class="left">
+                <ArtifactInformation :project-name="projectName"></ArtifactInformation>
+            </div>
+            <div class="middle">
+                <CanvasView height="800" width="800" :project-name="projectName"></CanvasView>
+            </div>
+            <div class="right">
+                <ArtifactProperties :project-name="projectName"></ArtifactProperties>
+            </div>
         </div>
     </div>
 </template>
@@ -16,20 +22,55 @@ import CanvasView from './components/CanvasView.vue'
 import ArtifactInformation from './components/ArtifactInformation.vue'
 import ArtifactProperties from './components/ArtifactProperties.vue'
 import Upload from "@/components/Upload.vue";
+import ProjectList from "@/components/ProjectList.vue";
 
 export default {
     name: 'App',
     components: {
+        ProjectList,
         Upload,
         CanvasView,
         ArtifactInformation,
         ArtifactProperties
     },
+    data() {
+        return {
+            projectName: null
+        }
+    },
+    methods: {
+        projectSelect(project) {
+            this.projectName = project.name;
+        }
+    }
 }
 </script>
 
 <style>
-.item {
-    display: inline-block;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
+
+.container {
+    height: 800px;
+    display: flex;
+}
+
+.left {
+    width: 30%;
+    max-height: 800px;
+    overflow-y: scroll;
+}
+
+.right {
+    width: 20%;
+    padding: 20px;
+}
+
+.middle {
+    width: 100%;
+}
+
 </style>

@@ -34,15 +34,15 @@ export default {
             this.uploadLoading = true;
             this.$bimserver.checkIn(this.projectName, e.file, (e) => {
                 this.progress(e);
-                console.log("上传中", e)
+                console.info("上传中", e)
             }, (e) => {
                 this.success();
                 this.uploadLoading = false;
-                console.log("上传完成")
+                console.info("上传完成")
             }, (e) => {
                 this.error(e);
                 this.uploadLoading = false;
-                console.log("上传失败", e)
+                console.info("上传失败", e)
             })
         }
     }

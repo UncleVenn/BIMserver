@@ -17,7 +17,6 @@ export default {
         this.$bimserver.bimServerApiPromise.done(() => {
             this.$bimserver.getAllProjects().then(projectList => {
                 this.projectList = projectList
-                console.log(projectList)
             })
         });
     }

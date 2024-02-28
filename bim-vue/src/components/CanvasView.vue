@@ -1,8 +1,6 @@
 <script>
 export default {
     props: {
-        width: null,
-        height: null,
         projectName: {
             type: String,
         },
@@ -75,11 +73,12 @@ export default {
 </script>
 
 <template>
-    <canvas ref="3dView" :width="width" :height="height"></canvas>
+    <canvas ref="3dView"></canvas>
 </template>
 
 <style scoped>
 canvas {
     width: 100%;
+    height: 100%;
 }
 </style>

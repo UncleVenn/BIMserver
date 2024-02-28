@@ -87,17 +87,6 @@ public class JarBimServer {
         final JarBimServer server = new JarBimServer();
         server.start(address, Integer.parseInt(port), homedir, "www");
     }
-
-    public void stop() {
-        LOGGER.info("Stopping server...");
-        try {
-            bimServer.stop();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
-        LOGGER.info("Server stopped successfully");
-    }
-
     /**
      * Add a file appender to every logger we can find (the loggers should already have been configured via logback.xml)
      *

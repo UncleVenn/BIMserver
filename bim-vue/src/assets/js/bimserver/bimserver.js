@@ -475,6 +475,6 @@ class Bimserver {
 
 }
 
-const bimserver = new Bimserver("http://192.168.0.38:8082/", "admin@bimserver.com", "123456");
+const bimserver = new Bimserver("http://172.16.16.222:8082/", "admin@bimserver.com", "123456");
 export default bimserver;
 

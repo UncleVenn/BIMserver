@@ -8,7 +8,7 @@
                 <ArtifactInformation :project-name="projectName"></ArtifactInformation>
             </div>
             <div class="middle">
-                <CanvasView height="800" width="800" :project-name="projectName"></CanvasView>
+                <CanvasView :project-name="projectName"></CanvasView>
             </div>
             <div class="right">
                 <ArtifactProperties :project-name="projectName"></ArtifactProperties>
@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import CanvasView from './components/CanvasView.vue'
-import ArtifactInformation from './components/ArtifactInformation.vue'
-import ArtifactProperties from './components/ArtifactProperties.vue'
+import CanvasView from '@/components/CanvasView.vue'
+import ArtifactInformation from '@/components/ArtifactInformation.vue'
+import ArtifactProperties from '@/components/ArtifactProperties.vue'
 import Upload from "@/components/Upload.vue";
 import ProjectList from "@/components/ProjectList.vue";
 

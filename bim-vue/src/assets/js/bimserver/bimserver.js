@@ -201,6 +201,10 @@ class Bimserver {
                 resolve(this.properties[id]);
             }
             let promise = new BimServerApiPromise(2);
+            promise.done(() => {
+                this.properties[id] = result;
+                resolve(result)
+            })
             let result = {};
             let model = this.models[project.lastRevisionId];
             model.get(id, (object) => {
@@ -257,10 +261,6 @@ class Bimserver {
                             }
                         })
                     }
-                })
-                promise.done(() => {
-                    this.properties[id] = result;
-                    resolve(result)
                 })
             })
         })

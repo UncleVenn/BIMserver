@@ -7,6 +7,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             renderColor: [
                 {
                     'id': 131850,
@@ -34,11 +35,13 @@ export default {
     methods: {
         init() {
             if (this.projectName !== null) {
+                this.loading = true;
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
                             // console.log(percentage + "% loaded")
                             if (percentage === 100) {
+                                this.loading = false;
                                 this.$bimserver.renderColor(this.renderColor);
                             }
                         }, {
@@ -73,10 +76,16 @@ export default {
 </script>
 
 <template>
-    <canvas ref="3dView"></canvas>
+    <div v-loading="loading">
+        <canvas ref="3dView"></canvas>
+    </div>
 </template>
 
 <style scoped>
+div{
+    width: 100%;
+    height: 100%;
+}
 canvas {
     width: 100%;
     height: 100%;

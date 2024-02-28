@@ -9,6 +9,7 @@ export default {
         return {
             tree: {},
             pickId: null,
+            loading: false,
             pickColor: null,
             currentNodeKey: null,
             artifactId: null,
@@ -29,10 +30,12 @@ export default {
     methods: {
         init() {
             if (this.projectName !== null) {
+                this.loading = true;
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
                             this.tree = result.getTree();
+                            this.loading = false;
                             this.$bimserver.tree = this.$refs['el-tree'];
                         })
                     })
@@ -62,10 +65,14 @@ export default {
 </script>
 
 <template>
-    <el-tree ref="el-tree" :data="[tree]" @current-change="handleNodeChange" default-expand-all
-             highlight-current node-key="id"
-             :current-node-key="currentNodeKey"
-             :props="defaultProps"
+    <el-tree
+        style="height: 100%"
+        ref="el-tree" :data="[tree]"
+        v-loading="loading"
+        @current-change="handleNodeChange" default-expand-all
+        highlight-current node-key="id"
+        :current-node-key="currentNodeKey"
+        :props="defaultProps"
     >
     </el-tree>
 </template>

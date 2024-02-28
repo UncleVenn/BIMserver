@@ -13,12 +13,17 @@ export default {
             project: null
         }
     },
+    methods: {
+        getProjectList() {
+            this.$bimserver.bimServerApiPromise.done(() => {
+                this.$bimserver.getAllProjects().then(projectList => {
+                    this.projectList = projectList
+                })
+            });
+        }
+    },
     created() {
-        this.$bimserver.bimServerApiPromise.done(() => {
-            this.$bimserver.getAllProjects().then(projectList => {
-                this.projectList = projectList
-            })
-        });
+        this.getProjectList();
     }
 }
 </script>

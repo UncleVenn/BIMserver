@@ -26,9 +26,6 @@ export default {
             uploadLoading: false
         }
     },
-    mounted() {
-
-    },
     methods: {
         upload(e) {
             this.uploadLoading = true;

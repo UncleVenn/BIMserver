@@ -22,7 +22,6 @@ export default {
     methods: {
         init() {
             if (this.projectName !== null) {
-
                 this.$mitt.on(`${this.projectName}-artifactId-selected`, this.artifactIdSelectedHandler)
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {

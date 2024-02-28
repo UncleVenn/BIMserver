@@ -1,7 +1,8 @@
 <template>
     <div>
         <div>
-            <ProjectList :select-project="projectSelect"></ProjectList>
+            <ProjectList ref="project-list" style="display: inline-block" :select-project="projectSelect"></ProjectList>
+            <el-button type="primary" @click="showUpload = true">上传</el-button>
         </div>
         <div class="container">
             <div class="left">
@@ -14,6 +15,15 @@
                 <ArtifactProperties :project-name="projectName"></ArtifactProperties>
             </div>
         </div>
+
+        <el-dialog
+            :visible.sync="showUpload"
+            width="30%"
+            center>
+            <el-input v-model="createProjectName" placeholder="请输入项目名称" style="margin-bottom: 20px"></el-input>
+            <Upload :project-name="createProjectName" v-show="createProjectName" @success="uploadSuccess"
+                    @error="uploadError" @progress="uploadProgress"></Upload>
+        </el-dialog>
     </div>
 </template>
 
@@ -35,12 +45,26 @@ export default {
     },
     data() {
         return {
-            projectName: null
+            projectName: null,
+            showUpload: false,
+            createProjectName: null,
         }
     },
     methods: {
         projectSelect(project) {
             this.projectName = project.name;
+        },
+        uploadSuccess() {
+            this.showUpload = false;
+            this.createProjectName = null;
+            this.$refs['project-list'].getProjectList();
+            this.$message.success('上传成功');
+        },
+        uploadError(e) {
+            this.$message.error(e);
+        },
+        uploadProgress() {
+
         }
     }
 }
@@ -65,7 +89,7 @@ body {
 }
 
 .right {
-    width: 20%;
+    width: 30%;
     padding: 20px;
 }
 

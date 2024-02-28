@@ -765,7 +765,7 @@ export class Viewer {
             0, 0, 1, // Up
             0, -1, 0  // Forward
         ];
-        this.camera.viewFit({aabb: modelBounds, viewDirection: [0, -1, 0], animate: animate}); // Position camera so that entire model bounds are in view
+        this.camera.viewFit({aabb: modelBounds, viewDirection: [0.3, -1, 0.3], animate: animate}); // Position camera so that entire model bounds are in view
         this.cameraSet = true;
         this.camera.forceBuild();
     }

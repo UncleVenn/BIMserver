@@ -215,7 +215,7 @@ class Bimserver {
                     GUID: object.getGlobalId(),
                     "UUID (Server)": object.object._u,
                 };
-                if(object.getGeometry){
+                if (object.getGeometry) {
                     object.getGeometry(function (geometryInfo) {
                         if (geometryInfo != null) {
                             var knownTranslations = {
@@ -243,8 +243,12 @@ class Bimserver {
                         }
                         promise.dec();
                     });
+                } else {
+                    promise.dec()
                 }
-                object.getIsDefinedBy(function (isDefinedBy, length) {
+                let flag = true;
+                object.getIsDefinedBy(function (isDefinedBy) {
+                    flag = false;
                     if (isDefinedBy.getType() === "IfcRelDefinesByProperties") {
                         isDefinedBy.getRelatingPropertyDefinition(function (propertySet) {
                             if (propertySet.getType() === "IfcPropertySet") {
@@ -258,10 +262,15 @@ class Bimserver {
                                 }).done(() => {
                                     promise.dec()
                                 });
+                            } else {
+                                promise.dec();
                             }
                         })
+                    } else {
+                        promise.dec();
                     }
                 })
+                if (flag) promise.dec();
             })
         })
     }

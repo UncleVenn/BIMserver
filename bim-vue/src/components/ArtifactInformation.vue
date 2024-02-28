@@ -10,7 +10,6 @@ export default {
             tree: {},
             pickId: null,
             loading: false,
-            pickColor: null,
             currentNodeKey: null,
             artifactId: null,
             defaultProps: {
@@ -49,12 +48,12 @@ export default {
                 let viewer = this.$bimserver.view.viewer;
                 viewer.viewFit([id], {
                     animate: true,
+                }).catch(e => {
                 })
                 if (this.pickId != null) {
                     this.$bimserver.resetColorSet(this.pickId);
                 }
                 this.pickId = id;
-                this.pickColor = viewer.getPickColor(id);
                 viewer.setSelectionState([id], false, true);
                 let clr = [0, 1, 0, 1];
                 viewer.setColor([id], clr)

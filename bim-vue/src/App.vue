@@ -82,7 +82,7 @@ export default {
         uploadError(e) {
             this.$message.error(e);
         },
-        uploadProgress() {
+        uploadProgress(e) {
 
         },
         parsingProgress(e, state) {

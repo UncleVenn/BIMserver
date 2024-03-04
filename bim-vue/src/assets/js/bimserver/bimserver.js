@@ -75,7 +75,7 @@ class Bimserver {
 
     resetColorSet(id) {
         let find = this.colorSet.find((item) => {
-            return item.id === id
+            return Array.isArray(item.id) ? item.id.includes(id) : item.id === id;
         });
         if (find) {
             this.view.viewer.setColor([id], find.color);

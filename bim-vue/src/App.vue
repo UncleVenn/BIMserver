@@ -48,25 +48,31 @@ export default {
             projectName: null,
             showUpload: false,
             createProjectName: null,
-            renderColor: [
-                {
-                    'id': [131850, 328249],
-                    'color': [1, 0.3, 0.3, 1],
-                },
-                {
-                    'id': 459321,
-                    'color': [0, 1, 1, 1],
-                },
-                {
-                    'id': 590393,
-                    'color': [1, 1, 0, 1],
-                },
-            ]
+            renderColor: null,
         }
+    },
+    created() {
+
     },
     methods: {
         projectSelect(project) {
             this.projectName = project.name;
+            if (this.projectName === 'test') {
+                this.renderColor = [
+                    {
+                        'id': [131850, 328249],
+                        'color': [1, 0.3, 0.3, 1],
+                    },
+                    {
+                        'id': 459321,
+                        'color': [0, 1, 1, 1],
+                    },
+                    {
+                        'id': 590393,
+                        'color': [1, 1, 0, 1],
+                    },
+                ];
+            }
         },
         uploadSuccess() {
             this.showUpload = false;
@@ -79,7 +85,7 @@ export default {
         },
         uploadProgress() {
 
-        }
+        },
     }
 }
 </script>

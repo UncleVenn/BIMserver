@@ -33,7 +33,7 @@ export default {
                         this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
                             // console.log(percentage + "% loaded")
                             if (percentage === 100) {
-                                this.$bimserver.renderColor(this.renderColor);
+                                if (this.renderColor) this.$bimserver.renderColor(this.renderColor);
                                 this.loading = false;
                             }
                         }, {

@@ -5,7 +5,12 @@ export default {
             type: String,
             default: null
         },
-        progress: {
+        uploadProgress: {
+            type: Function,
+            default: () => {
+            }
+        },
+        parsingProgress: {
             type: Function,
             default: () => {
             }
@@ -23,19 +28,23 @@ export default {
     },
     data() {
         return {
-            uploadLoading: false
+            uploadLoading: false,
+            loadingText: "",
         }
     },
     methods: {
         upload(e) {
             this.uploadLoading = true;
             this.$bimserver.checkIn(this.projectName, e.file, (e) => {
-                this.progress(e);
-                console.info("上传中", e)
+                this.uploadProgress(e);
+                this.loadingText = `上传中:${e}%`
+            }, (progress, e) => {
+                this.parsingProgress(progress)
+                this.loadingText = `${e.title}:${progress}%`
             }, (e) => {
                 this.success();
                 this.uploadLoading = false;
-                console.info("上传完成")
+                this.loadingText = `完成`
             }, (e) => {
                 this.error(e);
                 this.uploadLoading = false;
@@ -49,6 +58,7 @@ export default {
 <template>
     <el-upload
         v-loading="uploadLoading"
+        :element-loading-text="loadingText"
         drag
         action="#"
         :disabled="uploadLoading"
@@ -62,4 +72,11 @@ export default {
 </template>
 
 <style>
+.el-upload {
+    width: 100%;
+}
+
+.el-upload .el-upload-dragger {
+    width: 100%;
+}
 </style>

@@ -102,7 +102,7 @@ class Bimserver {
      * @param success function
      * @param error function
      */
-    checkIn(projectName, source, progress, success, error) {
+    checkIn(projectName, source, uploadProgress, parsingProgress, success, error) {
         let isRemoteUrl = () => {
             return typeof source === 'string' && source.startsWith("http")
         }
@@ -116,6 +116,27 @@ class Bimserver {
                     poid: project.oid
                 }, (data) => {
                     let deserializerOid = data.oid;
+                    let progressDoneHandled = false;
+                    let progressHandler = (topicId, state) => {
+                        if (state.state === "AS_ERROR") {
+                            this.apiClient.unregisterProgressHandler(topicId, progressHandler);
+                            error(state.errors)
+                        } else {
+                            if (state.progress !== -1) {
+                                parsingProgress(parseInt(state.progress),state);
+                            }
+                            if (state.state === "FINISHED") {
+                                if (!progressDoneHandled) {
+                                    progressDoneHandled = true;
+                                    this.apiClient.callWithNoIndication("ServiceInterface", "cleanupLongAction", {topicId: topicId}, function () {
+                                    }).done(() => {
+                                        this.apiClient.unregister(progressHandler);
+                                        success();
+                                    });
+                                }
+                            }
+                        }
+                    }
                     if (isRemoteUrl()) {
                         this.apiClient.callWithFullIndication("ServiceInterface", "checkinFromUrlAsync", {
                             deserializerOid: deserializerOid,
@@ -125,33 +146,12 @@ class Bimserver {
                             url: source,
                             fileName: null
                         }, (data) => {
-                            let progressDoneHandled = false;
-                            let progressHandler = (topicId, state) => {
-                                if (state.state === "AS_ERROR") {
-                                    this.apiClient.unregisterProgressHandler(topicId, progressHandler);
-                                    error(state.errors)
-                                } else {
-                                    if (state.progress !== -1) {
-                                        progress(parseInt(state.progress));
-                                    }
-                                    if (state.state === "FINISHED") {
-                                        if (!progressDoneHandled) {
-                                            progressDoneHandled = true;
-                                            this.apiClient.callWithNoIndication("ServiceInterface", "cleanupLongAction", {topicId: topicId}, function () {
-                                            }).done(() => {
-                                                this.apiClient.unregister(progressHandler);
-                                                success();
-                                            });
-                                        }
-                                    }
-                                }
-
-                            }
                             this.apiClient.registerProgressHandler(data, progressHandler);
                         });
                     } else {
                         this.apiClient.initiateCheckin(project, deserializerOid, (topicId) => {
-                            this.apiClient.checkin(topicId, project, path, source, deserializerOid, progress, success, error);
+                            this.apiClient.registerProgressHandler(topicId, progressHandler);
+                            this.apiClient.checkin(topicId, project, path, source, deserializerOid, uploadProgress, success, error);
                         }, error)
                     }
                 })

@@ -22,7 +22,7 @@
             center>
             <el-input v-model="createProjectName" placeholder="请输入项目名称" style="margin-bottom: 20px"></el-input>
             <Upload :project-name="createProjectName" v-show="createProjectName" @success="uploadSuccess"
-                    @error="uploadError" @progress="uploadProgress"></Upload>
+                    @error="uploadError"></Upload>
         </el-dialog>
     </div>
 </template>
@@ -52,7 +52,6 @@ export default {
         }
     },
     created() {
-
     },
     methods: {
         projectSelect(project) {
@@ -84,6 +83,9 @@ export default {
             this.$message.error(e);
         },
         uploadProgress() {
+
+        },
+        parsingProgress(e,state) {
 
         },
     }

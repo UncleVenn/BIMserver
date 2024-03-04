@@ -4,24 +4,16 @@ export default {
         projectName: {
             type: String,
         },
+        renderColor: {
+            type: Array,
+            default: () => {
+                return []
+            }
+        },
     },
     data() {
         return {
-            loading: false,
-            renderColor: [
-                {
-                    'id': 131850,
-                    'color': [1, 0.3, 0.3, 1],
-                },
-                {
-                    'id': 459321,
-                    'color': [0, 1, 1, 1],
-                },
-                {
-                    'id': 590393,
-                    'color': [1, 1, 0, 1],
-                },
-            ]
+            loading: false
         }
     },
     created() {
@@ -41,8 +33,8 @@ export default {
                         this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
                             // console.log(percentage + "% loaded")
                             if (percentage === 100) {
-                                this.loading = false;
                                 this.$bimserver.renderColor(this.renderColor);
+                                this.loading = false;
                             }
                         }, {
                             loaderSettings: {
@@ -82,10 +74,11 @@ export default {
 </template>
 
 <style scoped>
-div{
+div {
     width: 100%;
     height: 100%;
 }
+
 canvas {
     width: 100%;
     height: 100%;

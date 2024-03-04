@@ -9,7 +9,7 @@
                 <ArtifactInformation :project-name="projectName"></ArtifactInformation>
             </div>
             <div class="middle">
-                <CanvasView :project-name="projectName"></CanvasView>
+                <CanvasView :project-name="projectName" :render-color="renderColor"></CanvasView>
             </div>
             <div class="right">
                 <ArtifactProperties :project-name="projectName"></ArtifactProperties>
@@ -48,6 +48,20 @@ export default {
             projectName: null,
             showUpload: false,
             createProjectName: null,
+            renderColor: [
+                {
+                    'id': [131850, 328249],
+                    'color': [1, 0.3, 0.3, 1],
+                },
+                {
+                    'id': 459321,
+                    'color': [0, 1, 1, 1],
+                },
+                {
+                    'id': 590393,
+                    'color': [1, 1, 0, 1],
+                },
+            ]
         }
     },
     methods: {
@@ -96,5 +110,4 @@ body {
 .middle {
     width: 100%;
 }
-
 </style>

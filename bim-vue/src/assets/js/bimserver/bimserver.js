@@ -3,6 +3,10 @@ import {BimServerApiPromise} from "./bimserver/bimserverapipromise.js";
 import {BimServerViewer} from "./bimsurfer/bimserverviewer.js";
 import {BimServerModel} from "./bimsurfer/BimServerModel.js";
 
+const URL = "http://172.16.16.222:8082/";
+const USERNAME = "admin@bimserver.com";
+const PASSWORD = "123456";
+
 //cpb6XhFDWsXfhaz
 class Bimserver {
     constructor(address, username, password) {
@@ -59,12 +63,13 @@ class Bimserver {
 
     /**
      * 颜色用的是sRGBA
-     * @param params 渲染的构建以及颜色 [{'id'=>'',color=>[r,g,b,a]}]
+     * @param params 渲染的构建以及颜色 [{'id'=>''|[],color=>[r,g,b,a]}]
      */
     renderColor(params) {
         this.colorSet = params;
         for (let param of params) {
-            this.view.viewer.setColor([param.id], param.color);
+            let id = Array.isArray(param.id) ? param.id : [param.id];
+            this.view.viewer.setColor(id, param.color);
         }
     }
 
@@ -484,6 +489,6 @@ class Bimserver {
 
 }
 
-const bimserver = new Bimserver("http://172.16.16.222:8082/", "admin@bimserver.com", "123456");
+const bimserver = new Bimserver(URL, USERNAME, PASSWORD);
 export default bimserver;
 

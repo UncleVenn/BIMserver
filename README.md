@@ -7,3 +7,5 @@ bim-vue中有三个组件
 
 
 BimServerJar启动会自动安装指定home目录下的install_plugins目录中的插件
+
+运行需要修改bim-vue/src/assets/js/bimserver/bimserver.js中的URL,USERNAME,PASSWORD配置信息

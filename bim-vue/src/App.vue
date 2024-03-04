@@ -51,7 +51,7 @@ export default {
             renderColor: null,
         }
     },
-    created() {
+    mounted() {
     },
     methods: {
         projectSelect(project) {

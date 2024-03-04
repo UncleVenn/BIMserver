@@ -10,6 +10,7 @@ export default {
             tree: {},
             pickId: null,
             loading: false,
+            loadingText: "加载中...",
             currentNodeKey: null,
             artifactId: null,
             defaultProps: {
@@ -68,6 +69,7 @@ export default {
         style="height: 100%"
         ref="el-tree" :data="[tree]"
         v-loading="loading"
+        :element-loading-text="loadingText"
         @current-change="handleNodeChange" default-expand-all
         highlight-current node-key="id"
         :current-node-key="currentNodeKey"

@@ -13,7 +13,8 @@ export default {
     },
     data() {
         return {
-            loading: false
+            loading: false,
+            loadingText: "",
         }
     },
     created() {
@@ -32,6 +33,7 @@ export default {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
                             // console.log(percentage + "% loaded")
+                            this.loadingText = `加载中:${percentage.toFixed(2)}%`
                             if (percentage === 100) {
                                 if (this.renderColor) this.$bimserver.renderColor(this.renderColor);
                                 this.loading = false;
@@ -68,7 +70,10 @@ export default {
 </script>
 
 <template>
-    <div v-loading="loading">
+    <div
+        v-loading="loading"
+        :element-loading-text="loadingText"
+    >
         <canvas ref="3dView"></canvas>
     </div>
 </template>

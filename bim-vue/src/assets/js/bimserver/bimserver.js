@@ -123,7 +123,7 @@ class Bimserver {
                             error(state.errors)
                         } else {
                             if (state.progress !== -1) {
-                                parsingProgress(parseInt(state.progress),state);
+                                parsingProgress(parseInt(state.progress), state);
                             }
                             if (state.state === "FINISHED") {
                                 if (!progressDoneHandled) {

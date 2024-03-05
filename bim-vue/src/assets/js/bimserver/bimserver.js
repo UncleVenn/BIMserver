@@ -4,6 +4,7 @@ import {BimServerViewer} from "./bimsurfer/bimserverviewer.js";
 import {BimServerModel} from "./bimsurfer/BimServerModel.js";
 
 const URL = "http://172.16.16.222:8082/";
+// const URL = "http://192.168.0.38:8082/";
 const USERNAME = "admin@bimserver.com";
 const PASSWORD = "123456";
 
@@ -16,7 +17,7 @@ class Bimserver {
         this.apiClient = new BimServerClient(address);
         this.view = null;
         this.tree = null;
-        this.colorSet = null;
+        this.colorSet = [];
         this.apiClient.init().then(() => {
             this.apiClient.login(username, password, (token) => {
                 this.bimServerApiPromise.fire();
@@ -66,7 +67,7 @@ class Bimserver {
      * @param params 渲染的构建以及颜色 [{'id'=>''|[],color=>[r,g,b,a]}]
      */
     renderColor(params) {
-        this.colorSet = params;
+        this.colorSet = params === null ? [] : params;
         for (let param of params) {
             let id = Array.isArray(param.id) ? param.id : [param.id];
             this.view.viewer.setColor(id, param.color);

@@ -7,7 +7,7 @@ export default {
     },
     data() {
         return {
-            tree: {},
+            tree: null,
             pickId: null,
             loading: false,
             loadingText: "加载中...",
@@ -65,18 +65,30 @@ export default {
 </script>
 
 <template>
-    <el-tree
-        style="height: 100%"
-        ref="el-tree" :data="[tree]"
+    <el-scrollbar
+        class="scrollbar"
         v-loading="loading"
         :element-loading-text="loadingText"
-        @current-change="handleNodeChange" default-expand-all
-        highlight-current node-key="id"
-        :current-node-key="currentNodeKey"
-        :props="defaultProps"
     >
-    </el-tree>
+        <el-tree
+            v-show="tree"
+            style="height: 100%"
+            ref="el-tree" :data="[tree]"
+            @current-change="handleNodeChange" default-expand-all
+            highlight-current node-key="id"
+            :current-node-key="currentNodeKey"
+            :props="defaultProps"
+        >
+        </el-tree>
+    </el-scrollbar>
 </template>
 
-<style scoped>
+<style>
+.scrollbar {
+    height: 100%;
+}
+
+.scrollbar .el-scrollbar__wrap {
+    overflow-x: hidden;
+}
 </style>

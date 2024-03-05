@@ -107,7 +107,6 @@ body {
 .left {
     width: 30%;
     max-height: 800px;
-    overflow-y: scroll;
 }
 
 .right {

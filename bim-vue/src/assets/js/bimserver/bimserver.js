@@ -92,7 +92,7 @@ class Bimserver {
      * @param sort
      * @param fireEvent
      */
-    hidden(id, visible, sort = true, fireEvent = true) {
+    setVisibility(id, visible, sort = true, fireEvent = true) {
         this.view.setVisibility(id, visible, sort, fireEvent)
     }
 

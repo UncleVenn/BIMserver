@@ -7,7 +7,7 @@ export default {
     },
     data() {
         return {
-            tree: null,
+            tree: {},
             pickId: null,
             loading: false,
             loadingText: "加载中...",
@@ -71,7 +71,7 @@ export default {
         :element-loading-text="loadingText"
     >
         <el-tree
-            v-show="tree"
+            v-show="Object.keys(tree).length>0"
             style="height: 100%"
             ref="el-tree" :data="[tree]"
             @current-change="handleNodeChange" default-expand-all

@@ -18,6 +18,8 @@ class Bimserver {
         this.view = null;
         this.tree = null;
         this.colorSet = [];
+        this.pickId = null;
+        this.timer = null;
         this.apiClient.init().then(() => {
             this.apiClient.login(username, password, (token) => {
                 this.bimServerApiPromise.fire();
@@ -169,6 +171,38 @@ class Bimserver {
         });
 
 
+    }
+
+    viewFocus(id, color = [0, 1, 0, 1], flashing = false) {
+        let viewer = this.view.viewer;
+        viewer.viewFit([id], {
+            animate: true,
+        }).catch(e => {
+        })
+        if (this.timer != null) {
+            clearTimeout(this.timer);
+        }
+        if (this.pickId != null) {
+            this.resetColorSet(this.pickId);
+        }
+        this.pickId = id;
+        viewer.setSelectionState([id], false, true);
+        viewer.setColor([id], color)
+        if (flashing) {
+            let count = 0;
+            this.timer = setInterval(() => {
+                if (count % 2 === 1) {
+                    viewer.setSelectionState([id], false, true);
+                    viewer.setColor([id], color)
+                } else {
+                    this.resetColorSet(this.pickId);
+                }
+                count++;
+                if (count === 8) {
+                    clearInterval(this.timer);
+                }
+            }, 300)
+        }
     }
 
     /**

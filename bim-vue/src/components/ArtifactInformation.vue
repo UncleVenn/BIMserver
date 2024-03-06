@@ -46,18 +46,7 @@ export default {
             let id = data.id;
             this.$mitt.emit(`${this.projectName}-artifactId-selected`, id)
             if (this.$bimserver.view != null && node.childNodes.length === 0) {
-                let viewer = this.$bimserver.view.viewer;
-                viewer.viewFit([id], {
-                    animate: true,
-                }).catch(e => {
-                })
-                if (this.pickId != null) {
-                    this.$bimserver.resetColorSet(this.pickId);
-                }
-                this.pickId = id;
-                viewer.setSelectionState([id], false, true);
-                let clr = [0, 1, 0, 1];
-                viewer.setColor([id], clr)
+                this.$bimserver.viewFocus(id, [0, 1, 0, 1], false);
             }
         },
     }

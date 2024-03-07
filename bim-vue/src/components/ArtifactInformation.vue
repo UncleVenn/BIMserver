@@ -7,7 +7,7 @@ export default {
     },
     data() {
         return {
-            tree: {},
+            tree: [],
             pickId: null,
             loading: false,
             loadingText: "加载中...",
@@ -66,7 +66,7 @@ export default {
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
-                            this.tree = result.getTree();
+                            this.tree = [result.getTree()];
                             this.loading = false;
                         })
                     })
@@ -89,9 +89,9 @@ export default {
     >
         <el-tree
             render-after-expand
-            v-show="Object.keys(tree).length>0"
+            v-show="tree.length>0"
             style="height: 100%"
-            ref="el-tree" :data="[tree]"
+            ref="el-tree" :data="tree"
             @current-change="handleNodeChange"
             :default-expand-all="false"
             highlight-current node-key="id"

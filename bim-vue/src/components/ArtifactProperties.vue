@@ -17,13 +17,16 @@ export default {
     watch: {
         projectName(val, oval) {
             this.init();
+            if (oval != null) {
+                this.$bus.$off(`${oval}-artifactId-selected`, this.artifactIdSelectedHandler);
+            }
         }
     },
     methods: {
         init() {
             this.properties = null;
             if (this.projectName !== null) {
-                this.$mitt.on(`${this.projectName}-artifactId-selected`, this.artifactIdSelectedHandler)
+                this.$bus.$on(`${this.projectName}-artifactId-selected`, this.artifactIdSelectedHandler)
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.project = project;

@@ -22,15 +22,19 @@ export default {
 
     },
     watch: {
-        projectName(val) {
+        projectName(val, oval) {
             this.init();
+            if (oval != null) {
+                this.$bus.$off(`${oval}-tree-selected`, this.render);
+            }
         }
     },
     methods: {
         initListener() {
-            this.$mitt.on(`${this.projectName}-tree-selected`, (id) => {
-                this.$bimserver.viewFocus(id, [0, 1, 0, 1], false);
-            })
+            this.$bus.$on(`${this.projectName}-tree-selected`, this.render)
+        },
+        render(id) {
+            this.$bimserver.viewFocus(id, [0, 1, 0, 1], false);
         },
         init() {
             if (this.projectName !== null) {
@@ -57,9 +61,9 @@ export default {
                             handler: (renderLayer, ids, render) => {
                                 if (render) {
                                     this.$nextTick(() => {
-                                        this.$mitt.emit(`${this.projectName}-view-selected`, ids[0])
-                                        this.$mitt.emit(`${this.projectName}-artifactId-selected`, ids[0])
-                                        this.$bimserver.viewFocus(ids[0], [0, 1, 0, 1], false);
+                                        this.$bus.$emit(`${this.projectName}-view-selected`, ids[0])
+                                        this.$bus.$emit(`${this.projectName}-artifactId-selected`, ids[0])
+                                        this.render(ids[0]);
                                     });
                                 }
                             }

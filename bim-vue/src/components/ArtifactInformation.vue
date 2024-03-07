@@ -23,8 +23,11 @@ export default {
         this.init();
     },
     watch: {
-        projectName(val) {
+        projectName(val, oval) {
             this.init();
+            if (oval != null) {
+                this.$bus.$off(`${oval}-view-selected`, this.viewSelectedHandler);
+            }
         }
     },
     mounted() {
@@ -38,22 +41,23 @@ export default {
                 this.explandNode(node.parent)
             }
         },
-        initListener() {
-            this.$mitt.on(`${this.projectName}-view-selected`, (id) => {
-                let node = this.$bimserver.tree.getNode(id);
-                this.$bimserver.tree.setCurrentNode(node.data);
+        viewSelectedHandler(id) {
+            let node = this.$bimserver.tree.getNode(id);
+            this.$bimserver.tree.setCurrentNode(node.data);
+            this.$nextTick(() => {
+                this.explandNode(node);
                 this.$nextTick(() => {
-                    this.explandNode(node);
-                    this.$nextTick(() => {
-                        //TODO 展示时 选中的dom会被往下挤 会导致scrollIntoView失效 暂时使用延时来解决
-                        setTimeout(() => {
-                            this.$bimserver.tree.$el.querySelector('.is-current').scrollIntoView({
-                                block: "center"
-                            })
-                        }, 500)
-                    })
+                    //TODO 展示时 选中的dom会被往下挤 会导致scrollIntoView失效 暂时使用延时来解决
+                    setTimeout(() => {
+                        this.$bimserver.tree.$el.querySelector('.is-current').scrollIntoView({
+                            block: "center"
+                        })
+                    }, 500)
                 })
             })
+        },
+        initListener() {
+            this.$bus.$on(`${this.projectName}-view-selected`, this.viewSelectedHandler)
         },
         init() {
             if (this.projectName !== null) {
@@ -70,10 +74,8 @@ export default {
             }
         },
         handleNodeChange(data, node, self) {
-            if (node.childNodes.length === 0) {
-                this.$mitt.emit(`${this.projectName}-tree-selected`, data.id)
-            }
-            this.$mitt.emit(`${this.projectName}-artifactId-selected`, data.id)
+            this.$bus.$emit(`${this.projectName}-tree-selected`, data.id)
+            this.$bus.$emit(`${this.projectName}-artifactId-selected`, data.id)
         },
     }
 }

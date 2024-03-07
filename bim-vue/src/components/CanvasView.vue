@@ -19,6 +19,7 @@ export default {
     },
     created() {
         this.init();
+
     },
     watch: {
         projectName(val) {
@@ -26,9 +27,15 @@ export default {
         }
     },
     methods: {
+        initListener() {
+            this.$mitt.on(`${this.projectName}-tree-selected`, (id) => {
+                this.$bimserver.viewFocus(id, [0, 1, 0, 1], false);
+            })
+        },
         init() {
             if (this.projectName !== null) {
                 this.loading = true;
+                this.initListener();
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.renderCanvasByProject(project, this.$refs['3dView'], (percentage) => {
@@ -48,15 +55,11 @@ export default {
                         });
                         this.$bimserver.view.addSelectionListener({
                             handler: (renderLayer, ids, render) => {
-                                if (render && this.$bimserver.tree) {
+                                if (render) {
                                     this.$nextTick(() => {
-                                        let node = this.$bimserver.tree.getNode(ids[0]);
-                                        this.$bimserver.tree.setCurrentNode(node.data);
-                                        this.$bimserver.tree.$emit('current-change', node.data, node);
-                                        this.$nextTick(() => {
-                                            let element = this.$bimserver.tree.$el.querySelector('.is-current')
-                                            element.scrollIntoView()
-                                        })
+                                        this.$mitt.emit(`${this.projectName}-view-selected`, ids[0])
+                                        this.$mitt.emit(`${this.projectName}-artifactId-selected`, ids[0])
+                                        this.$bimserver.viewFocus(ids[0], [0, 1, 0, 1], false);
                                     });
                                 }
                             }
@@ -64,7 +67,8 @@ export default {
                     })
                 })
             }
-        }
+        },
+
     }
 }
 </script>

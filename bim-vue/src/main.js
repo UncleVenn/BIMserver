@@ -6,8 +6,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import ElementUI from 'element-ui';
 Vue.config.productionTip = false
 Vue.prototype.$bimserver = bimserver;
-Vue.prototype.$mitt = mitt();
 Vue.use(ElementUI);
+Vue.prototype.$mitt = mitt();
 new Vue({
     render: h => h(App),
 }).$mount('#app')

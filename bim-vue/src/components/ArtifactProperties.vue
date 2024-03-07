@@ -15,7 +15,7 @@ export default {
         this.init();
     },
     watch: {
-        projectName(val) {
+        projectName(val, oval) {
             this.init();
         }
     },

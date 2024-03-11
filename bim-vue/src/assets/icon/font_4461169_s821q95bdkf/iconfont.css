@@ -1,8 +1,8 @@
 @font-face {
   font-family: "element-icons"; /* Project id 4461169 */
-  src: url('iconfont.woff2?t=1710125805392') format('woff2'),
-       url('iconfont.woff?t=1710125805392') format('woff'),
-       url('iconfont.ttf?t=1710125805392') format('truetype');
+  src: url('iconfont.woff2?t=1710126401272') format('woff2'),
+       url('iconfont.woff?t=1710126401272') format('woff'),
+       url('iconfont.ttf?t=1710126401272') format('truetype');
 }
 
 .element-icons {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-24gf-folderShare:before {
+  content: "\eac5";
 }
 
 .el-icon-yuan:before {

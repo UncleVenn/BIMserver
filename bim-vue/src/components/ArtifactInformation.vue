@@ -149,4 +149,7 @@ export default {
     font-size: 14px;
     width: 0;
 }
+.el-icon-yuan{
+    color: #67C23A;
+}
 </style>

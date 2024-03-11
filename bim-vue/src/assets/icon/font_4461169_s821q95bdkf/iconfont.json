@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7594872",
+      "name": "24gf-folderShare",
+      "font_class": "24gf-folderShare",
+      "unicode": "eac5",
+      "unicode_decimal": 60101
+    },
+    {
       "icon_id": "1250665",
       "name": "圆",
       "font_class": "yuan",

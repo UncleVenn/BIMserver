@@ -66,17 +66,28 @@ export default {
                 this.$bimserver.bimServerApiPromise.done(() => {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
-                            this.tree = [result.getTree()];
+                            this.tree = result.getTree();
                             this.loading = false;
                         })
                     })
                 })
             }
         },
+        setVisibility(node, visible) {
+            node.data.visible = visible;
+            if (node.childNodes.length > 0) {
+                //父级变化 改变所有子级的状态
+                node.childNodes.forEach(child => {
+                    this.setVisibility(child, visible);
+                })
+            }
+            this.$bimserver.setVisibility([node.data.id], visible);
+        },
         handleNodeChange(data, node, self) {
             this.$bus.$emit(`${this.projectName}-tree-selected`, data.id)
             this.$bus.$emit(`${this.projectName}-artifactId-selected`, data.id)
         },
+
     }
 }
 </script>
@@ -90,7 +101,7 @@ export default {
         <el-tree
             render-after-expand
             v-show="tree.length>0"
-            style="height: 100%"
+            style="height: 100%;padding-right: 8px"
             ref="el-tree" :data="tree"
             @current-change="handleNodeChange"
             :default-expand-all="false"
@@ -98,6 +109,18 @@ export default {
             :current-node-key="currentNodeKey"
             :props="defaultProps"
         >
+            <template v-slot="{node,data}">
+                <span class="custom-tree-node">
+                       <a class="ellipsis" :title="data.title"><i slot="suffix" :class="data.icon"></i> {{
+                               node.label
+                           }}</a>
+                      <el-button size="mini"
+                                 :icon="data.visible?'el-icon-yanjing_xianshi':'el-icon-yanjing_yincang'"
+                                 @click.stop="setVisibility(node,!data.visible)"
+                                 type="text">
+                      </el-button>
+                </span>
+            </template>
         </el-tree>
     </el-scrollbar>
 </template>
@@ -105,9 +128,25 @@ export default {
 <style>
 .scrollbar {
     height: 100%;
+    width: 300px;
 }
 
 .scrollbar .el-scrollbar__wrap {
     overflow-x: hidden;
+}
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    width: 0;
 }
 </style>

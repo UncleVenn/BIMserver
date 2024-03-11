@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "element-icons"; /* Project id 4461169 */
+  src: url('iconfont.woff2?t=1710125805392') format('woff2'),
+       url('iconfont.woff?t=1710125805392') format('woff'),
+       url('iconfont.ttf?t=1710125805392') format('truetype');
+}
+
+.element-icons {
+  font-family: "element-icons" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-yuan:before {
+  content: "\e657";
+}
+
+.el-icon-yanjing_yincang:before {
+  content: "\eb45";
+}
+
+.el-icon-yanjing_xianshi:before {
+  content: "\eb46";
+}
+
+.el-icon-24gl-folderShare:before {
+  content: "\eac0";
+}
+
+.el-icon-hierarchy:before {
+  content: "\e641";
+}
+

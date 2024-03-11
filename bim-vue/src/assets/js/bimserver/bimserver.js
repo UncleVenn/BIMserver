@@ -95,7 +95,8 @@ class Bimserver {
      * @param fireEvent
      */
     setVisibility(id, visible, sort = true, fireEvent = true) {
-        this.view.setVisibility(id, visible, sort, fireEvent)
+        if (this.view)
+            this.view.viewer.setVisibility(id, visible, sort, fireEvent)
     }
 
     /**
@@ -228,8 +229,10 @@ class Bimserver {
             this.apiClient.getModel(project.oid, project.lastRevisionId, project.schema, deep, (model) => {
                 this.models[project.lastRevisionId] = model;
                 this._preloadModel(project).done(() => {
-                    let bimServerModel = new BimServerModel(model);
-                    resolve(bimServerModel)
+                    model.getAllOfType("IfcProject", false, function (object) {
+                        let bimServerModel = new BimServerModel(object);
+                        resolve(bimServerModel)
+                    });
                 })
             })
         })

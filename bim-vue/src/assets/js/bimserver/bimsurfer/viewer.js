@@ -1070,7 +1070,7 @@ export class Viewer {
         return new Promise((resolve, reject) => {
             const aabb = this.getAabbFor(ids);
             if (Utils.isEmptyAabb(aabb)) {
-                console.error("No AABB for objects", ids);
+                // console.error("No AABB for objects", ids);
                 reject();
             } else {
                 if (!settings) {

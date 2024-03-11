@@ -3,6 +3,12 @@ export default {
     props: {
         projectName: {
             type: String,
+        },
+        renderColor: {
+            type: Array,
+            default: () => {
+                return []
+            }
         }
     },
     data() {
@@ -17,6 +23,7 @@ export default {
                 children: 'children',
                 label: 'name',
             },
+            showEye: true,
         }
     },
     created() {
@@ -67,6 +74,7 @@ export default {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
                             this.tree = result.getTree();
+                            this.showEye = this.$bimserver.view !== null;
                             this.loading = false;
                         })
                     })
@@ -87,7 +95,16 @@ export default {
             this.$bus.$emit(`${this.projectName}-tree-selected`, data.id)
             this.$bus.$emit(`${this.projectName}-artifactId-selected`, data.id)
         },
-
+        getNodeColor(data) {
+            let id = data.id;
+            let find = this.renderColor.find((item) => {
+                return Array.isArray(item.id) ? item.id.includes(id) : item.id === id;
+            });
+            if (find && data.children.length === 0) {
+                let color = find.color;
+                return (`color(srgb ${color[0]} ${color[1]} ${color[2]})`)
+            }
+        }
     }
 }
 </script>
@@ -111,14 +128,19 @@ export default {
         >
             <template v-slot="{node,data}">
                 <span class="custom-tree-node">
-                       <a class="ellipsis" :title="data.title"><i slot="suffix" :class="data.icon"></i> {{
-                               node.label
-                           }}</a>
+                       <a class="ellipsis" :title="data.title">
+                           <i slot="suffix" :class="data.icon"
+                              :style="{
+                                     'color' : getNodeColor(data)
+                                 }"></i>
+                           {{ node.label }}
+                       </a>
                       <el-button size="mini"
+                                 v-if="showEye"
                                  :icon="data.visible?'el-icon-eye-open':'el-icon-eye-close'"
                                  @click.stop="setVisibility(node,!data.visible)"
                                  type="text">
-                      </el-button>
+                    </el-button>
                 </span>
             </template>
         </el-tree>
@@ -149,7 +171,8 @@ export default {
     font-size: 14px;
     width: 0;
 }
-.el-icon-yuan{
+
+.el-icon-yuan {
     color: #67C23A;
 }
 </style>

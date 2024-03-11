@@ -6,7 +6,7 @@
         </div>
         <div class="container">
             <div class="left">
-                <ArtifactInformation :project-name="projectName"></ArtifactInformation>
+                <ArtifactInformation :project-name="projectName" :render-color="renderColor"></ArtifactInformation>
             </div>
             <div class="middle">
                 <CanvasView :project-name="projectName" :render-color="renderColor"></CanvasView>

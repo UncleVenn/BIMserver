@@ -1,8 +1,8 @@
 @font-face {
   font-family: "element-icons"; /* Project id 4461169 */
-  src: url('iconfont.woff2?t=1710126401272') format('woff2'),
-       url('iconfont.woff?t=1710126401272') format('woff'),
-       url('iconfont.ttf?t=1710126401272') format('truetype');
+  src: url('iconfont.woff2?t=1710133917798') format('woff2'),
+       url('iconfont.woff?t=1710133917798') format('woff'),
+       url('iconfont.ttf?t=1710133917798') format('truetype');
 }
 
 .element-icons {
@@ -13,24 +13,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.el-icon-24gf-folderShare:before {
-  content: "\eac5";
+.el-icon-types:before {
+  content: "\e62c";
 }
 
 .el-icon-yuan:before {
   content: "\e657";
 }
 
-.el-icon-yanjing_yincang:before {
+.el-icon-eye-close:before {
   content: "\eb45";
 }
 
-.el-icon-yanjing_xianshi:before {
+.el-icon-eye-open:before {
   content: "\eb46";
-}
-
-.el-icon-24gl-folderShare:before {
-  content: "\eac0";
 }
 
 .el-icon-hierarchy:before {

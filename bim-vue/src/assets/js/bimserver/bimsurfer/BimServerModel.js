@@ -99,7 +99,7 @@ export class BimServerModel {
             typeNode = Object.create(Node.prototype);
             typeNode.init(relatedElement.oid, this.stripIfc(relatedElement.getType()), relatedElement);
             typeNode.type = "types";
-            typeNode.icon = 'el-icon-24gf-folderShare';
+            typeNode.icon = 'el-icon-types';
             createdTypes[relatedElement.getType()] = typeNode;
             parentNode.add(typeNode);
         }

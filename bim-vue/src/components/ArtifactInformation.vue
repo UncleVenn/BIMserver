@@ -115,7 +115,7 @@ export default {
                                node.label
                            }}</a>
                       <el-button size="mini"
-                                 :icon="data.visible?'el-icon-yanjing_xianshi':'el-icon-yanjing_yincang'"
+                                 :icon="data.visible?'el-icon-eye-open':'el-icon-eye-close'"
                                  @click.stop="setVisibility(node,!data.visible)"
                                  type="text">
                       </el-button>

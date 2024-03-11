@@ -6,11 +6,11 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "7594872",
-      "name": "24gf-folderShare",
-      "font_class": "24gf-folderShare",
-      "unicode": "eac5",
-      "unicode_decimal": 60101
+      "icon_id": "35985528",
+      "name": "types",
+      "font_class": "types",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
     },
     {
       "icon_id": "1250665",
@@ -22,23 +22,16 @@
     {
       "icon_id": "5387735",
       "name": "眼睛_隐藏",
-      "font_class": "yanjing_yincang",
+      "font_class": "eye-close",
       "unicode": "eb45",
       "unicode_decimal": 60229
     },
     {
       "icon_id": "5387736",
       "name": "眼睛_显示",
-      "font_class": "yanjing_xianshi",
+      "font_class": "eye-open",
       "unicode": "eb46",
       "unicode_decimal": 60230
-    },
-    {
-      "icon_id": "7594810",
-      "name": "24gl-folderShare",
-      "font_class": "24gl-folderShare",
-      "unicode": "eac0",
-      "unicode_decimal": 60096
     },
     {
       "icon_id": "36657475",

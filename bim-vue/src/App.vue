@@ -48,7 +48,7 @@ export default {
             projectName: null,
             showUpload: false,
             createProjectName: null,
-            renderColor: null,
+            renderColor: [],
         }
     },
     mounted() {

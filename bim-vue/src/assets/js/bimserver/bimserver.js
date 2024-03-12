@@ -20,6 +20,7 @@ class Bimserver {
         this.colorSet = [];
         this.pickId = null;
         this.timer = null;
+        this.objects = [];
         this.apiClient.init().then(() => {
             this.apiClient.login(username, password, (token) => {
                 this.bimServerApiPromise.fire();
@@ -226,11 +227,16 @@ class Bimserver {
 
     getArtifactInformation(project, deep) {
         return new Promise((resolve, reject) => {
+            if (this.objects[project.lastRevisionId]) {
+                resolve(this.objects[project.lastRevisionId]);
+            }
             this.apiClient.getModel(project.oid, project.lastRevisionId, project.schema, deep, (model) => {
                 this.models[project.lastRevisionId] = model;
                 this._preloadModel(project).done(() => {
-                    model.getAllOfType("IfcProject", false, function (object) {
+                    model.getAllOfType("IfcProject", false, (object) => {
                         let bimServerModel = new BimServerModel(object);
+                        bimServerModel.length = Object.keys(model.objects).length;
+                        this.objects[project.lastRevisionId] = bimServerModel;
                         resolve(bimServerModel)
                     });
                 })
@@ -250,71 +256,70 @@ class Bimserver {
             })
             let result = {};
             let model = this.models[project.lastRevisionId];
-            model.get(id, (object) => {
-                result[object.getType()] = {
-                    Name: object.getName(),
-                    Description: object.getDescription(),
-                    "Owner History": object.object._rOwnerHistory,
-                    GUID: object.getGlobalId(),
-                    "UUID (Server)": object.object._u,
-                };
-                if (object.getGeometry) {
-                    object.getGeometry(function (geometryInfo) {
-                        if (geometryInfo != null) {
-                            var knownTranslations = {
-                                TOTAL_SURFACE_AREA: "Total surface area",
-                                TOTAL_SHAPE_VOLUME: "Total shape volume",
-                                SURFACE_AREA_ALONG_X: "Surface area along X axis",
-                                SURFACE_AREA_ALONG_Y: "Surface area along Y axis",
-                                SURFACE_AREA_ALONG_Z: "Surface area along Z axis",
-                                WALKABLE_SURFACE_AREA: "Walkable surface area",
-                                LARGEST_FACE_AREA: "Largest face area",
-                                BOUNDING_BOX_SIZE_ALONG_X: "Bounding box size along X axis",
-                                BOUNDING_BOX_SIZE_ALONG_Y: "Bounding box size along Y axis",
-                                BOUNDING_BOX_SIZE_ALONG_Z: "Bounding box size along Z axis",
-                                LARGEST_FACE_DIRECTION: "Largest face direction"
-                            };
-                            if (geometryInfo.object.additionalData != null) {
-                                let calc = {};
-                                var additionalData = JSON.parse(geometryInfo.object.additionalData);
-                                for (const key in additionalData) {
-                                    let value = additionalData[key];
-                                    calc[knownTranslations[key]] = value;
-                                }
-                                result['Calculated'] = calc;
+            let object = model.objects[id];
+            result[object.getType()] = {
+                Name: object.getName(),
+                Description: object.getDescription(),
+                "Owner History": object.object._rOwnerHistory,
+                GUID: object.getGlobalId(),
+                "UUID (Server)": object.object._u,
+            };
+            if (object.getGeometry) {
+                object.getGeometry(function (geometryInfo) {
+                    if (geometryInfo != null) {
+                        var knownTranslations = {
+                            TOTAL_SURFACE_AREA: "Total surface area",
+                            TOTAL_SHAPE_VOLUME: "Total shape volume",
+                            SURFACE_AREA_ALONG_X: "Surface area along X axis",
+                            SURFACE_AREA_ALONG_Y: "Surface area along Y axis",
+                            SURFACE_AREA_ALONG_Z: "Surface area along Z axis",
+                            WALKABLE_SURFACE_AREA: "Walkable surface area",
+                            LARGEST_FACE_AREA: "Largest face area",
+                            BOUNDING_BOX_SIZE_ALONG_X: "Bounding box size along X axis",
+                            BOUNDING_BOX_SIZE_ALONG_Y: "Bounding box size along Y axis",
+                            BOUNDING_BOX_SIZE_ALONG_Z: "Bounding box size along Z axis",
+                            LARGEST_FACE_DIRECTION: "Largest face direction"
+                        };
+                        if (geometryInfo.object.additionalData != null) {
+                            let calc = {};
+                            var additionalData = JSON.parse(geometryInfo.object.additionalData);
+                            for (const key in additionalData) {
+                                let value = additionalData[key];
+                                calc[knownTranslations[key]] = value;
                             }
+                            result['Calculated'] = calc;
                         }
-                        promise.dec();
-                    });
-                } else {
-                    promise.dec()
-                }
-                let flag = true;
-                object.getIsDefinedBy(function (isDefinedBy) {
-                    flag = false;
-                    if (isDefinedBy.getType() === "IfcRelDefinesByProperties") {
-                        isDefinedBy.getRelatingPropertyDefinition(function (propertySet) {
-                            if (propertySet.getType() === "IfcPropertySet") {
-                                let prop = {}
-                                propertySet.getHasProperties(function (property) {
-                                    property.getNominalValue(value => {
-                                        prop[property.getName()] = value == null ? "" : value._v;
-                                    }).done(() => {
-                                        result[propertySet.getName()] = prop;
-                                    })
-                                }).done(() => {
-                                    promise.dec()
-                                });
-                            } else {
-                                promise.dec();
-                            }
-                        })
-                    } else {
-                        promise.dec();
                     }
-                })
-                if (flag) promise.dec();
+                    promise.dec();
+                });
+            } else {
+                promise.dec()
+            }
+            let flag = true;
+            object.getIsDefinedBy(function (isDefinedBy) {
+                flag = false;
+                if (isDefinedBy.getType() === "IfcRelDefinesByProperties") {
+                    isDefinedBy.getRelatingPropertyDefinition(function (propertySet) {
+                        if (propertySet.getType() === "IfcPropertySet") {
+                            let prop = {}
+                            propertySet.getHasProperties(function (property) {
+                                property.getNominalValue(value => {
+                                    prop[property.getName()] = value == null ? "" : value._v;
+                                }).done(() => {
+                                    result[propertySet.getName()] = prop;
+                                })
+                            }).done(() => {
+                                promise.dec()
+                            });
+                        } else {
+                            promise.dec();
+                        }
+                    })
+                } else {
+                    promise.dec();
+                }
             })
+            if (flag) promise.dec();
         })
     }
 

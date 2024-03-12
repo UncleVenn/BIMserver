@@ -1,4 +1,6 @@
 <script>
+import {BimServerApiPromise} from "@/assets/js/bimserver/bimserver/bimserverapipromise";
+
 export default {
     props: {
         projectName: {

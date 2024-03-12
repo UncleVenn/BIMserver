@@ -16,6 +16,7 @@ export default {
             tree: [],
             pickId: null,
             loading: false,
+            height: 0,
             loadingText: "加载中...",
             currentNodeKey: null,
             artifactId: null,
@@ -49,19 +50,22 @@ export default {
             }
         },
         viewSelectedHandler(id) {
-            let node = this.$bimserver.tree.getNode(id);
-            this.$bimserver.tree.setCurrentNode(node.data);
-            this.$nextTick(() => {
-                this.explandNode(node);
+            if (this.height === 0) {
+                //启用了虚拟树 将不可再使用该功能
+                let node = this.$bimserver.tree.getNode(id);
+                this.$bimserver.tree.setCurrentNode(node.data);
                 this.$nextTick(() => {
-                    //TODO 展示时 选中的dom会被往下挤 会导致scrollIntoView失效 暂时使用延时来解决
-                    setTimeout(() => {
-                        this.$bimserver.tree.$el.querySelector('.is-current').scrollIntoView({
-                            block: "center"
-                        })
-                    }, 500)
+                    this.explandNode(node);
+                    this.$nextTick(() => {
+                        //TODO 展示时 选中的dom会被往下挤 会导致scrollIntoView失效 暂时使用延时来解决
+                        setTimeout(() => {
+                            this.$bimserver.tree.$el.querySelector('.is-current').scrollIntoView({
+                                block: "center"
+                            })
+                        }, 500)
+                    })
                 })
-            })
+            }
         },
         initListener() {
             this.$bus.$on(`${this.projectName}-view-selected`, this.viewSelectedHandler)
@@ -74,6 +78,12 @@ export default {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
                             this.tree = result.getTree();
+                            if (result.length >= 10000) {
+                                //启用虚拟树
+                                this.height = this.$refs['scroll-bar'].$el.clientHeight;
+                            } else {
+                                this.height = 0;
+                            }
                             this.showEye = this.$bimserver.view !== null;
                             this.loading = false;
                         })
@@ -92,7 +102,9 @@ export default {
             this.$bimserver.setVisibility([node.data.id], visible);
         },
         handleNodeChange(data, node, self) {
-            this.$bus.$emit(`${this.projectName}-tree-selected`, data.id)
+            if (node.childNodes.length === 0) {
+                this.$bus.$emit(`${this.projectName}-tree-selected`, data.id)
+            }
             this.$bus.$emit(`${this.projectName}-artifactId-selected`, data.id)
         },
         getNodeColor(data) {
@@ -111,11 +123,20 @@ export default {
 
 <template>
     <el-scrollbar
+        ref="scroll-bar"
         class="scrollbar"
         v-loading="loading"
         :element-loading-text="loadingText"
     >
+        <el-alert
+            v-if="height>0"
+            title="节点过多,启用了虚拟列表,部分功能将无法使用"
+            type="warning"
+            center
+            show-icon>
+        </el-alert>
         <el-tree
+            :height="height"
             render-after-expand
             v-show="tree.length>0"
             style="height: 100%;padding-right: 8px"

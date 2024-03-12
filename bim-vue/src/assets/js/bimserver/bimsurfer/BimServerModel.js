@@ -5,6 +5,7 @@ export class BimServerModel {
         this.project = project;
         this.tree = [];
         this.types = [];
+        this.length = 0;
     }
 
     getTree() {

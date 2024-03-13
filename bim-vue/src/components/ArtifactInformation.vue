@@ -28,7 +28,7 @@ export default {
         }
     },
     created() {
-        this.init();
+        this.init()
     },
     watch: {
         projectName(val, oval) {
@@ -38,8 +38,8 @@ export default {
             }
         }
     },
-    mounted() {
-        this.$bimserver.tree = this.$refs['el-tree'];
+    destroyed() {
+        this.$bus.$off(`${this.projectName}-view-selected`, this.viewSelectedHandler);
     },
     methods: {
         explandNode(node) {
@@ -50,22 +50,14 @@ export default {
             }
         },
         viewSelectedHandler(id) {
-            if (this.height === 0) {
-                //启用了虚拟树 将不可再使用该功能
-                let node = this.$bimserver.tree.getNode(id);
-                this.$bimserver.tree.setCurrentNode(node.data);
-                this.$nextTick(() => {
-                    this.explandNode(node);
-                    this.$nextTick(() => {
-                        //TODO 展示时 选中的dom会被往下挤 会导致scrollIntoView失效 暂时使用延时来解决
-                        setTimeout(() => {
-                            this.$bimserver.tree.$el.querySelector('.is-current').scrollIntoView({
-                                block: "center"
-                            })
-                        }, 500)
-                    })
-                })
-            }
+            let node = this.$bimserver.tree.getNode(id);
+            this.$bimserver.tree.setCurrentNode(node.data);
+            this.explandNode(node);
+            this.$nextTick(() => {
+                let res = this.findNodeIndex(node.data, this.tree);
+                let visualList = this.$refs['el-tree'].$children[0];
+                visualList.scrollToIndex(res.index - Math.floor((this.height / 22) / 3));
+            })
         },
         initListener() {
             this.$bus.$on(`${this.projectName}-view-selected`, this.viewSelectedHandler)
@@ -78,12 +70,9 @@ export default {
                     this.$bimserver.getProjectsByName(this.projectName).then(project => {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
                             this.tree = result.getTree();
-                            if (result.length >= 10000) {
-                                //启用虚拟树
-                                this.height = this.$refs['scroll-bar'].$el.clientHeight;
-                            } else {
-                                this.height = 0;
-                            }
+                            //启用虚拟树
+                            this.height = this.$refs['scroll-bar'].$el.clientHeight;
+                            this.$bimserver.tree = this.$refs['el-tree'];
                             this.showEye = this.$bimserver.view !== null;
                             this.loading = false;
                         })
@@ -116,7 +105,30 @@ export default {
                 let color = find.color;
                 return (`color(srgb ${color[0]} ${color[1]} ${color[2]})`)
             }
-        }
+        },
+        findNodeIndex(data, list) {
+            let index = 0;
+            let findFlag = false;
+            //未找到
+            for (let i = 0; i < list.length; i++) {
+                let item = list[i];
+                index++;
+                if (data.id === item.id) {
+                    findFlag = true;
+                    break;
+                }
+                let node = this.$bimserver.tree.getNode(item.id);
+                if (node.expanded) {
+                    let res = this.findNodeIndex(data, item.children);
+                    index += res.index;
+                    if (res.find) {
+                        findFlag = true;
+                        break;
+                    }
+                }
+            }
+            return {index: index, find: findFlag};
+        },
     }
 }
 </script>
@@ -128,13 +140,6 @@ export default {
         v-loading="loading"
         :element-loading-text="loadingText"
     >
-        <el-alert
-            v-if="height>0"
-            title="节点过多,启用了虚拟列表,部分功能将无法使用"
-            type="warning"
-            center
-            show-icon>
-        </el-alert>
         <el-tree
             :height="height"
             render-after-expand

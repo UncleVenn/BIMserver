@@ -24,6 +24,9 @@ export default {
             }
         }
     },
+    destroyed() {
+        this.$bus.$off(`${this.projectName}-artifactId-selected`, this.artifactIdSelectedHandler);
+    },
     methods: {
         init() {
             this.properties = null;
@@ -37,9 +40,13 @@ export default {
             }
         },
         artifactIdSelectedHandler(id) {
-            this.$bimserver.getArtifactProperties(this.project, id).then(properties => {
-                this.properties = properties;
-            })
+            if (typeof id === 'number') {
+                this.$bimserver.getArtifactProperties(this.project, id).then(properties => {
+                    this.properties = properties;
+                })
+            } else {
+                this.properties = null;
+            }
         },
         getProperty(value) {
             let type = typeof (value);

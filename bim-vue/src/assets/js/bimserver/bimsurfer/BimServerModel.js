@@ -98,7 +98,7 @@ export class BimServerModel {
         let typeNode = createdTypes[relatedElement.getType()];
         if (typeNode == null) {
             typeNode = Object.create(Node.prototype);
-            typeNode.init(relatedElement.oid, this.stripIfc(relatedElement.getType()), relatedElement);
+            typeNode.init(relatedElement.getType() + '-' + relatedElement.oid, this.stripIfc(relatedElement.getType()), relatedElement);
             typeNode.type = "types";
             typeNode.icon = 'el-icon-types';
             createdTypes[relatedElement.getType()] = typeNode;

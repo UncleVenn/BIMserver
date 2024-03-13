@@ -235,7 +235,6 @@ class Bimserver {
                 this._preloadModel(project).done(() => {
                     model.getAllOfType("IfcProject", false, (object) => {
                         let bimServerModel = new BimServerModel(object);
-                        bimServerModel.length = Object.keys(model.objects).length;
                         this.objects[project.lastRevisionId] = bimServerModel;
                         resolve(bimServerModel)
                     });

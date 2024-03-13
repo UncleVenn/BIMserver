@@ -29,6 +29,9 @@ export default {
             }
         }
     },
+    destroyed() {
+        this.$bus.$off(`${this.projectName}-tree-selected`, this.render);
+    },
     methods: {
         initListener() {
             this.$bus.$on(`${this.projectName}-tree-selected`, this.render)

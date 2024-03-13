@@ -151,7 +151,7 @@ export default {
             v-show="tree.length>0"
             ref="el-virtual-tree" :data="tree"
             @current-change="handleNodeChange"
-            :default-expand-all="false"
+            :default-expand-all="true"
             highlight-current node-key="id"
             :current-node-key="currentNodeKey"
             :props="defaultProps"
@@ -181,32 +181,7 @@ export default {
 .scrollbar {
     height: 100%;
     width: 300px;
-}
-
-::-webkit-scrollbar {
-    position: absolute;
-    right: 2px;
-    width: 6px;
-    bottom: 2px;
-    z-index: 1;
-    border-radius: 4px;
-    opacity: 0;
-    transition: opacity .12s ease-out;
-}
-
-::-webkit-scrollbar-thumb {
-    position: relative;
-    display: block;
-    width: 0;
-    height: 0;
-    cursor: pointer;
-    background-color: rgba(167, 168, 173, .3);
-    transition: background-color .3s;
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(167, 168, 173, .5);
+    padding-left: 6px;
 }
 
 .ellipsis {
@@ -222,6 +197,7 @@ export default {
     justify-content: space-between;
     font-size: 14px;
     width: 0;
+    padding-right: 6px;
 }
 
 .el-icon-yuan {

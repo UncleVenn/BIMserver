@@ -9,7 +9,7 @@
     }"
         role="tree"
     >
-        <virtual-list v-if="height" :style="{ height: height + 'px', 'overflow-y': 'auto' }"
+        <virtual-list v-if="height" :style="{ height: height + 'px', 'overflow-y': 'scroll' }"
                       :data-key="getNodeKey"
                       ref="virtual-list"
                       :data-sources="visibleList"
@@ -535,3 +535,29 @@ export default {
     }
 };
 </script>
+<style>
+.el-tree > div::-webkit-scrollbar {
+    position: absolute;
+    width: 6px;
+    bottom: 2px;
+    z-index: 1;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity .12s ease-out;
+}
+
+.el-tree > div::-webkit-scrollbar-thumb {
+    position: relative;
+    display: block;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+    background-color: rgba(167, 168, 173, .3);
+    transition: background-color .3s;
+    border-radius: 4px;
+}
+
+.el-tree > div::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(167, 168, 173, .5);
+}
+</style>

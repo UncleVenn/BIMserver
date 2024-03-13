@@ -76,7 +76,7 @@ export default {
                         this.$bimserver.getArtifactInformation(project, false).then(result => {
                             this.tree = result.getTree();
                             //启用虚拟树
-                            this.height = this.$refs['scroll-bar'].$el.clientHeight;
+                            this.height = this.$refs['scroll-bar'].clientHeight;
                             this.$bimserver.tree = this.$refs['el-virtual-tree'];
                             this.showEye = this.$bimserver.view !== null;
                             this.loading = false;
@@ -139,7 +139,7 @@ export default {
 </script>
 
 <template>
-    <el-scrollbar
+    <div
         ref="scroll-bar"
         class="scrollbar"
         v-loading="loading"
@@ -149,7 +149,6 @@ export default {
             :height="height"
             render-after-expand
             v-show="tree.length>0"
-            style="height: 100%;padding-right: 8px"
             ref="el-virtual-tree" :data="tree"
             @current-change="handleNodeChange"
             :default-expand-all="false"
@@ -175,7 +174,7 @@ export default {
                 </span>
             </template>
         </el-virtual-tree>
-    </el-scrollbar>
+    </div>
 </template>
 
 <style>
@@ -184,8 +183,26 @@ export default {
     width: 300px;
 }
 
-.scrollbar .el-scrollbar__wrap {
-    overflow-x: hidden;
+::-webkit-scrollbar {
+    position: absolute;
+    right: 2px;
+    width: 6px;
+    bottom: 2px;
+    z-index: 1;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity .12s ease-out;
+}
+
+::-webkit-scrollbar-thumb {
+    position: relative;
+    display: block;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+    border-radius: inherit;
+    background-color: rgba(167, 168, 173, .3);
+    transition: background-color .3s;
 }
 
 .ellipsis {

@@ -200,9 +200,13 @@ export default {
     width: 0;
     height: 0;
     cursor: pointer;
-    border-radius: inherit;
     background-color: rgba(167, 168, 173, .3);
     transition: background-color .3s;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(167, 168, 173, .5);
 }
 
 .ellipsis {

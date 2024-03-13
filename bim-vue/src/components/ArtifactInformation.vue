@@ -1,4 +1,6 @@
 <script>
+import ElVirtualTree from '@/components/el-virtual-tree';
+
 export default {
     props: {
         projectName: {
@@ -10,6 +12,9 @@ export default {
                 return []
             }
         }
+    },
+    components: {
+        ElVirtualTree
     },
     data() {
         return {
@@ -55,7 +60,7 @@ export default {
             this.explandNode(node);
             this.$nextTick(() => {
                 let res = this.findNodeIndex(node.data, this.tree);
-                let visualList = this.$refs['el-tree'].$children[0];
+                let visualList = this.$refs['el-virtual-tree'].$refs['virtual-list'];
                 visualList.scrollToIndex(res.index - Math.floor((this.height / 22) / 3));
             })
         },
@@ -72,7 +77,7 @@ export default {
                             this.tree = result.getTree();
                             //启用虚拟树
                             this.height = this.$refs['scroll-bar'].$el.clientHeight;
-                            this.$bimserver.tree = this.$refs['el-tree'];
+                            this.$bimserver.tree = this.$refs['el-virtual-tree'];
                             this.showEye = this.$bimserver.view !== null;
                             this.loading = false;
                         })
@@ -140,12 +145,12 @@ export default {
         v-loading="loading"
         :element-loading-text="loadingText"
     >
-        <el-tree
+        <el-virtual-tree
             :height="height"
             render-after-expand
             v-show="tree.length>0"
             style="height: 100%;padding-right: 8px"
-            ref="el-tree" :data="tree"
+            ref="el-virtual-tree" :data="tree"
             @current-change="handleNodeChange"
             :default-expand-all="false"
             highlight-current node-key="id"
@@ -169,7 +174,7 @@ export default {
                     </el-button>
                 </span>
             </template>
-        </el-tree>
+        </el-virtual-tree>
     </el-scrollbar>
 </template>
 
